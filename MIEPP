@@ -1,0 +1,26 @@
+create database MIEEP;
+
+create table device (
+	id int(11)  primary key auto_increment not null,
+    description varchar(20) NOT NULL,
+    shop_id int(11) NOT NULL,
+    dept_id int(11) NOT NULL,
+    imei varchar(25) NOT NULL UNIQUE,
+    FOREIGN KEY(shop_id) REFERENCES shop(id),
+	FOREIGN KEY(dept_id) REFERENCES departament(id)
+);
+
+create TABLE `shop` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `number` int(11) NOT NULL,
+  `description` varchar(45) NOT NULL,
+  `cnpj` varchar(12) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+;
+
+CREATE TABLE `departament` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
