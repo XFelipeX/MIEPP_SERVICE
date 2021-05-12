@@ -1,10 +1,10 @@
-let status = 'try';
 let socket;
 let tryConnect = true;
+let status = 'try';
 const divStatus = document.querySelector('.js-status');
 
 function getConnection() {
-  if (tryConnect === true) return new WebSocket('ws://localhost:9090');
+  if (tryConnect === true) return new WebSocket('ws://192.168.0.99:9090');
   return null;
 }
 
@@ -15,7 +15,7 @@ function connect() {
     socket.onopen = (e) => {
       console.log('Connected');
       status = 'connected';
-      setInterval(ping, 5000);
+      setInterval(ping, 10000);
     };
 
     socket.onmessage = (e) => {
@@ -76,13 +76,14 @@ function connect() {
 
     socket.onerror = (e) => {
       console.log(e);
-      status = 'try';
+      status = 'error';
     };
 
     socket.onclose = (e) => {
-      setTimeout(() => {
-        connect();
-      }, 10000);
+      setInterval(() => {
+        connect(status);
+      }, 1000);
+
       status = 'error';
     };
 
@@ -90,10 +91,10 @@ function connect() {
       if (status === 'connected') {
         return;
       }
-      console.log(status);
+
       if (socket !== null) socket.send('__ping__');
       time = setTimeout(() => {
-        status = 'error';
+        status = 'try';
       }, 5000);
     }
 
@@ -121,6 +122,9 @@ function verifyStatus(status) {
 }
 
 setInterval(() => {
+  if (!navigator.onLine) {
+    status = 'error';
+  }
   verifyStatus(status);
 }, 5000);
 
